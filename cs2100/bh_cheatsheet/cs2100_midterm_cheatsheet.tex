@@ -1,0 +1,1275 @@
+\documentclass[10pt, portrait]{article}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{calc}
+\usepackage{multicol}
+\usepackage{ifthen}
+\usepackage[a4paper,margin=5mm,portrait]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage{newtxtext} 
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage[table]{xcolor}
+\usepackage{vwcol}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\usepackage{mathtools}
+\usepackage{nicematrix}
+\usepackage[T1]{fontenc}
+\usepackage{cancel}
+\usepackage{ mathrsfs }
+\usepackage{listings}
+\usepackage{background}
+\usepackage{multirow} % Added for MIPS Cheatsheet tables
+\setlist{nosep}
+
+\backgroundsetup{
+scale=1,
+color=black,
+opacity=0.3,
+angle=0,
+contents={%
+  }%
+}
+
+\pdfinfo{
+  /Title (CS2100.pdf)
+  /Creator (TeX)
+  /Producer (pdfTeX 1.40.0)
+  /Author (Seamus)
+  /Subject (Example)
+  /Keywords (pdflatex, latex,pdftex,tex)}
+
+\lstset{language=Java,keywordstyle={\bfseries \color{black}}}
+
+\pagestyle{empty}
+
+\newenvironment{tightcenter}{%
+  \setlength\topsep{0pt}
+  \setlength\parskip{0pt}
+  \begin{center}
+}{%
+  \end{center}
+}
+
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\section}{\@startsection{section}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}%
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand\rmdefault{\sfdefault}
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+\renewcommand\labelitemii{•}
+\renewcommand{\lnot}{\mathord{\sim}}
+\renewcommand{\bf}[1]{\textbf{#1}}
+\newcommand{\abs}[1]{\vert #1 \vert}
+\newcommand{\Mod}[1]{\ \mathrm{mod}\ #1}
+\makeatother
+
+\definecolor{myblue}{cmyk}{1,.72,0,.38}
+\everymath\expandafter{\the\everymath \color{myblue}}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\let\iff\leftrightarrow
+\let\Iff\Leftrightarrow
+\let\then\rightarrow
+\let\Then\Rightarrow
+
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+\setlength{\leftmargini}{0.5cm}
+\setlength{\leftmarginii}{0.5cm}
+\setlist[itemize,1]{leftmargin=2mm,labelindent=1mm,labelsep=1mm}
+\setlist[itemize,2]{leftmargin=4mm,labelindent=1mm,labelsep=1mm}
+
+\newtheorem{example}[section]{Example}
+
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols*}{2}
+
+\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+    \fbox{%
+        \parbox{0.8\linewidth}{\centering \textcolor{black}{
+            {\Large\textbf{CS2100}}
+            \\ \normalsize{AY26/27 Sem 1}}
+            \\ {\footnotesize \textcolor{myblue}{adapted from ngmh}} 
+        }%
+    }
+\end{center}
+
+\section{1. Introduction}
+\begin{itemize}
+    \item Programming Language: A formal language that specifies a set of instructions for a computer to implement specific algorithms to solve problems
+    \item High-Level: Level of abstraction closer to problem domain, provides productivity and portability
+    \item Assembly Language: Textual and symbolic representation of instructions
+    \item Machine Code: Binary bits of instructions and data
+    \item von Neumann Architecture: Computer consisting of Input Device, Central Processing Unit (Control Unit, ALU), Memory Unit, Output Device
+\end{itemize}
+
+\section{2. C Programming}
+\begin{itemize}
+    \item Edit, Compile, Execute
+    \item C Program Format
+    \begin{verbatim}
+    preprocessor directives
+
+    main function header {
+        declaration of variables
+        executable statements
+    }
+    \end{verbatim}
+    \item Uninitialised variables do not necessarily contain zero
+    \item Variables consist of address, name, data type, and value
+    \item Data types: int (4 bytes), float (4 bytes), double (8 bytes), char (1 byte = 2 hexadecimal digits)
+    \item C is strongly typed
+    \item Preprocessor Directives: Inclusion of header files, Macro Expansions
+    \item Input / Output : scanf, printf, remember address for scanf
+    \item $\%n.mf$ means width $n$ including $m$ decimal places
+    \item \%\% for literal \%, \textbackslash" for literal "
+    \item Scientific notation: use e or E to represent multiples of 10, eg. 3e8, 2.4e-3, 3.0E+8. \%e or \%E  
+    \item Boolean expressions can be short-circuited
+    \item $a = 5 + (b = 10)$ is allowed, but $a = 5 + b = 10$ is not allowed as the latter becomes $(a = 5 + b) = 10$
+    \item Selection Structure:
+\end{itemize}
+\begin{center}
+    \includegraphics[width=1\linewidth]{images/selection structure.png}
+\end{center}
+If there's no break, the program will execute the code in the following cases until it reaches a break, even if it doesn't belong to those cases. If myChar is 'D', it will skip cases 'A' to 'C' and go straight to case 'D'. 
+
+\begin{center}
+\textbf{Table 1: C Data Types and Format Specifiers} \\[0.2cm]
+\resizebox{\linewidth}{!}{%
+\fontsize{14pt}{17pt}\selectfont
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|c|c|c|c|l|}
+\hline
+\textbf{Data Type}
+& \textbf{Bytes}
+& \textbf{Bits}
+& \textbf{\texttt{printf}}
+& \textbf{\texttt{scanf}}
+& \textbf{Typical Value Range}
+\\ \hline
+
+\texttt{char}
+& 1
+& 8
+& \texttt{\%c} or \texttt{\%hhd}
+& \texttt{\%c} or \texttt{\%hhd}
+& $-128$ to $127$ when signed
+\\ \hline
+
+\texttt{unsigned char}
+& 1
+& 8
+& \texttt{\%c} or \texttt{\%hhu}
+& \texttt{\%c} or \texttt{\%hhu}
+& $0$ to $255$
+\\ \hline
+
+\texttt{short}
+& 2
+& 16
+& \texttt{\%hd}
+& \texttt{\%hd}
+& $-32{,}768$ to $32{,}767$
+\\ \hline
+
+\texttt{unsigned short}
+& 2
+& 16
+& \texttt{\%hu}
+& \texttt{\%hu}
+& $0$ to $65{,}535$
+\\ \hline
+
+\texttt{int}
+& 4
+& 32
+& \texttt{\%d} or \texttt{\%i}
+& \texttt{\%d} or \texttt{\%i}
+& $-2{,}147{,}483{,}648$ to $2{,}147{,}483{,}647$
+\\ \hline
+
+\texttt{unsigned int}
+& 4
+& 32
+& \texttt{\%u}
+& \texttt{\%u}
+& $0$ to $4{,}294{,}967{,}295$
+\\ \hline
+
+\texttt{long}
+& 4 or 8
+& 32 or 64
+& \texttt{\%ld}
+& \texttt{\%ld}
+& Platform-dependent
+\\ \hline
+
+\texttt{unsigned long}
+& 4 or 8
+& 32 or 64
+& \texttt{\%lu}
+& \texttt{\%lu}
+& Platform-dependent
+\\ \hline
+
+\texttt{long long}
+& 8
+& 64
+& \texttt{\%lld}
+& \texttt{\%lld}
+& Approximately $-9.22 \times 10^{18}$ to $9.22 \times 10^{18}$
+\\ \hline
+
+\texttt{unsigned long long}
+& 8
+& 64
+& \texttt{\%llu}
+& \texttt{\%llu}
+& $0$ to approximately $1.84 \times 10^{19}$
+\\ \hline
+
+\texttt{float}
+& 4
+& 32
+& \texttt{\%f}
+& \texttt{\%f}
+& Approximately $1.2 \times 10^{-38}$ to $3.4 \times 10^{38}$
+\\ \hline
+
+\texttt{double}
+& 8
+& 64
+& \texttt{\%f} or \texttt{\%lf}
+& \texttt{\%lf}
+& Approximately $2.3 \times 10^{-308}$ to $1.7 \times 10^{308}$
+\\ \hline
+
+\texttt{long double}
+& Platform-dependent
+& Platform-dependent
+& \texttt{\%Lf}
+& \texttt{\%Lf}
+& Platform-dependent
+\\ \hline
+
+\end{tabular}%
+}
+\end{center}
+note: printf receives float values as double so \%f works for double as well. \%e can be used in place of \%f to print float/double in scientific notation. 
+
+\begin{center}
+    \includegraphics[width=1.1\linewidth]
+    {images/printf.png}
+\end{center}
+
+\begin{center}
+    \includegraphics[width=1\linewidth]{images/precedence.png}
+\end{center}
+\begin{center}
+    \includegraphics[width=1\linewidth]
+    {images/referencing.png}
+\end{center}
+
+\section{3. Number Systems}
+\begin{itemize}
+    \item \textbf{Byte}: 8 bits, \textbf{Nibble}: 4 bits, \textbf{Word}: 4 Bytes = 8 hexadecimal digits
+    \item $N$ bits can represent $2^N$ values, $M$ values require $\lceil log_2M \rceil$ bits
+    \item Weighted-Positional Number System: Left is increasing powers, Right is decreasing powers
+    \item Number Systems: Decimal (Base 10), Binary (Base 2 / 0b), Octal (Base 8 / 0), Hexadecimal (Base 16 / 0x)
+    \item Base-R to Decimal: Multiplication by weights and summation
+    \item Decimal to Binary Conversion: Repeated Multiplication / Division by 2 (Works for other bases as well)
+    \item Repeated Division by 2:
+    \begin{verbatim}
+    43 (10) = 101011 (2)
+    21 r 1 LSB
+    10 r 1
+    5 r 0
+    2 r 1
+    1 r 0
+    0 r 1 MSB
+    \end{verbatim}
+    \item Repeated Multiplication by 2:
+    \begin{verbatim}
+    0.3125 (10) = 0.0101 (2)
+    0.625 c 0 MSB
+    1.250 c 1
+    0.500 c 0
+    1.000 c 1 LSB
+    \end{verbatim}
+    \item For conversion with other bases, use Base-10 as intermediary
+    \item Between bases of multiples of 2, simplify partition or split characters
+    \item Odd Parity Scheme: total number of 1s including parity bit must be odd
+    \item Even Parity Scheme: total number of 1s including parity bit must be even
+    \item ASCII: 7 bits + 1 parity bit (used as checksum)
+    \item Unsigned Numbers: Only non-negative values (as opposed to signed)
+    \item Overflow: Result of addition or subtraction goes out of range, can be detected by checking if sign of result matches
+    \item Smallest positive base 10 value of a floating point integer: $2^{\text{mantissa bits} + 1} + 1$
+\end{itemize}
+
+\subsection{Sign-and-Magnitude}
+\begin{itemize}
+    \item 1 sign bit (MSB), other bits for magnitude
+    \item Sign: 0 is positive, 1 is negative
+    \item Range: $-(2^{n-1}-1)$ to $2^{n-1}-1$
+    \item Has redundant zero
+    \item Negation: Just invert sign bit
+    \item Decimal Value = $(-1)^{b_{n-1}} + \sum_{i=0}^{n-2}b_i2 ^i$ 
+\end{itemize}
+
+\subsection{1s Complement}
+\begin{itemize}
+    \item $-x=2^n-x-1$
+    \item Sign: See MSB
+    \item Negation: Invert all bits
+    \item Range: $-(2^{n-1}-1)$ to $2^{n-1}-1$
+    \item Has redundant zero
+    \item Addition: Perform binary addition, adding 1 to the result if there is carry out due to redundant zero
+    \item Subtraction: Perform addition with negation of the second term
+    \item Decimal Value = $-b_{n-1}(2^{n-1}-1) + \sum_{i=0}^{n-2}b_i2 ^i$ 
+\end{itemize}
+
+\subsection{2s Complement}
+\begin{itemize}
+    \item $-x=2^n-x$
+    \item Sign: See MSB
+    \item Negation: Invert all bits, then add 1
+    \item Range: $-2^{n-1}$ to $2^{n-1}-1$
+    \item No redundant zero
+    \item Addition: Perform binary addition, ignoring carry out
+    \item Subtraction: Perform addition with negation of second term
+    \item Decimal Value = $-b_{n-1}2^{n-1} + \sum_{i=0}^{n-2}b_i2 ^i$ 
+\end{itemize}
+
+\subsection{Excess Representation}
+\begin{itemize}
+    \item Allows range of values to be distributed evenly between positive and negative values by a simple translation
+    \item Range: $-n$ to $n-1$
+    \item For even distributio of $k$-bit numbers we should use Excess-$2^{k-1}$ or Excess-$2^{k-1}-1$
+    \item Decimal Value = $\left( \sum_{i=0}^{n-1}b_i2 ^i \right) - K$, where $K$ is the excess-$K$ 
+\end{itemize}
+
+\subsection{Radix Complement}
+\begin{itemize}
+    \item For number of digits $n$ and radix $b$
+    \item $(b-1)$s Complement: $-x=b^n-x-1$. E.g. Base 7 complement: $(66666)_7 - (00155)_7 = (66511)_7$
+    \item $(b)$s Complement: $-x=b^n-x$. E.g. Base 7 complement: $(66667)_7 - (00155)_7 = (66512)_7$ 
+\end{itemize}
+
+\subsection{Fraction Extension}
+\begin{itemize}
+    \item For $n$ bits and $f$ fractional bits
+    \item $1$s Complement: $-x=2^n-x-2^{-f}$, invert all bits
+    \item $2$s Complement: $-x=2^n-x$, invert all bits, add $2^{-f}$ (the smallest bit)
+    \item Resolution is the smallest bit value
+    \item Might have to round off if non-exact
+\end{itemize}
+
+\subsection{Real Numbers}
+\begin{itemize}
+    \item Fixed Point Representation: Number of bits allocated for whole number part and fractional part
+    \item IEEE754 Floating Point Representation:
+    \begin{itemize}
+        \item Sign, Exponent, Mantissa (Fraction)
+        \item Single Precision: 1-bit sign, 8-bit exponent in excess-127, 23-bit mantissa
+        \item Double Precision: 1-bit sign, 11-bit exponent in excess-1023, 52-bit mantissa
+        \item Sign: 0 for positive, 1 for negative
+        \item Mantissa is normalised, with implicit leading bit 1 (e.g. $110.1 = 1.101 \times 2^2$)
+        \item Exponent is stored in excess-127 (e.g. $2+127=129$
+        \item Merge components together and express in hexadecimal
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \begingroup
+    \renewcommand{\arraystretch}{1.3} 
+    \resizebox{\linewidth}{!}{%
+    \small 
+    \begin{tabular}{|p{1.8cm}|p{1.9cm}|p{2.1cm}|p{2.9cm}|}
+    \hline
+    \textbf{Name} & \textbf{Hex} & \textbf{S E F (bits)} & \textbf{Value} \\ \hline
+    +0 & \texttt{0x00000000} & \texttt{0 00000000\newline 000...0} & +0 \\ \hline
+    -0 & \texttt{0x80000000} & \texttt{1 00000000\newline 000...0} & -0 (equal to +0) \\ \hline
+    Smallest positive \textbf{denormal} & \texttt{0x00000001} & \texttt{0 00000000\newline 000...01} & $0.000...01 \times 2^{-126}$\newline $= \mathbf{2^{-149}}$\newline $\approx 1.401 \times 10^{-45}$ \\ \hline
+    Largest denormal & \texttt{0x007FFFFF} & \texttt{0 00000000\newline 111...1} & $(1 - 2^{-23}) \times 2^{-126}$\newline $\approx 1.1754942 \times 10^{-38}$ \\ \hline
+    Smallest positive \textbf{normalised} & \texttt{0x00800000} & \texttt{0 00000001\newline 000...0} & $1.0 \times 2^{-126} = \mathbf{2^{-126}}$\newline $\approx 1.1754944 \times 10^{-38}$ \\ \hline
+    Next norm. after it & \texttt{0x00800001} & \texttt{0 00000001\newline 000...01} & $(1 + 2^{-23}) \times 2^{-126}$ \\ \hline
+    \texttt{0x01000000} & \texttt{0x01000000} & \texttt{0 00000010\newline 000...0} & $2^{-125}$ (NOT smallest) \\ \hline
+    1.0 & \texttt{0x3F800000} & \texttt{0 01111111\newline 000...0} & 1 \\ \hline
+    Largest normalised & \texttt{0x7F7FFFFF} & \texttt{0 11111110\newline 111...1} & $(2 - 2^{-23}) \times 2^{127}$\newline $\approx 3.4028 \times 10^{38}$ \\ \hline
+    +infinity & \texttt{0x7F800000} & \texttt{0 11111111\newline 000...0} & $+\infty$ \\ \hline
+    -infinity & \texttt{0xFF800000} & \texttt{1 11111111\newline 000...0} & $-\infty$ \\ \hline
+    NaN & \texttt{0x7F800001}..\newline\texttt{0x7FFFFFFF},\newline \texttt{0xFF800001}..\newline\texttt{0xFFFFFFFF} & x \texttt{11111111}\newline (F $\neq$ 0) & not a number \\ \hline
+    \end{tabular}%
+    }
+    \endgroup
+\end{center}
+
+\subsection{More Number Representations}
+\begin{itemize}
+    \item \textbf{Floating-Point Formats:} Various formats exist beyond standard single and double precision.
+    \begin{itemize}
+        \item FP64 (binary64): 64 bits (11 exp, 52 frac) primarily used for scientific computing.
+        \item FP32 (binary32): 32 bits (8 exp, 23 frac) used for general-purpose floating point.
+        \item BF16: 16 bits (8 exp, 7 frac) used for modern AI training.
+        \item FP16 (binary16): 16 bits (5 exp, 10 frac) used for graphics and AI inference/training.
+        \item FP8 E4M3: 8 bits (4 exp, 3 frac) used for AI weights and activations.
+        \item FP8 E5M2: 8 bits (5 exp, 2 frac) used for AI gradients.
+        \item FP4 (E2M1): 4 bits (2 exp, 1 frac) used for experimental/next-generation AI.
+    \end{itemize}
+    \item \textbf{Integer Quantization:} A popular approach to reduce precision is to quantize to integers with a floating-point scaling factor.
+    \begin{itemize}
+        \item Scaling factor = $(2^{b-1}-1) / \text{max absolute value}$, where $b$ is the desired bitwidth.
+        \item INT8 value = $\text{round}(\text{real value} \times \text{scaling factor})$.
+        \item Popular choices include INT4 or INT8 with an FP16/FP32 scaling factor.
+        \item INT4 is comparatively not as accurate as FP4, but FP4 requires specific hardware support while INT4 is generally doable on many types of hardware.
+    \end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/integer quantization.png}
+\end{center}
+    \item \textbf{IEEE 754 Special Values:} If the exponent bits are all zeros or all ones, it represents a special value. (All others are normalized values, with a hidden bit of 1).
+    \begin{itemize}
+        \item $\pm 0$: All exponent and fraction bits are zero.
+        \item \textbf{Denormalized numbers:} Exponent all zeros, but fraction is non-zero. 
+        \item Equation: $v = (-1)^{\text{sign}} \times 2^{(1-\text{bias})} \times (0.\text{fraction})$.
+        \item Denormalized numbers have a hidden bit of 0, the exponent is fixed at $1 - \text{bias}$, and they are used for representing very small numbers.
+        \item $\pm \infty$: Exponents all 1s, fraction all 0s.
+        \item \textbf{NaN (Not a Number):} Exponents all 1s, fraction non-zero (used to indicate error).
+    \end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/special values table.png}
+\end{center}
+    \item \textbf{Rounding:} The standard dictates that all computation must be done with at least 3 bits beyond the last significant bit of the fraction
+    \begin{itemize}
+        \item Guard bit: The first extra bit beyond the fraction's last significant bit
+        \item Round bit: The second extra bit.
+        \item Sticky bit: The ``OR'' of all bits beyond the round bit
+        \item Adding two floating point numbers requires denormalizing (shifting) one of the numbers to align the binary point
+        \item Eg. $1.0000 \times 2^4 + 1.1101 \times 2^0 \Rightarrow$ shift $1.1101$ by 4 to match the exponent. Discarded bits become the Guard bit ($1$), Round bit ($1$), Sticky bit ($0 \text{ OR } 1 = 1$)
+        \item Tie Breaker (Guard=$1$, Round=$0$, Sticky=$0$): If last bit is $0$, leave it alone, if last bit is $1$, round it up by adding $1$
+        \item For round-to-nearest-even, round up when:
+        \begin{itemize}
+            \item $G = 1$ \textbf{and} 
+            \item $R = 1 \text{ or } S = 1 \text{ or kept LSB } = 1 $
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Precision}
+\begin{itemize}
+    \item Smallest positive integer not representable: $2^{\textit{mantissa bits} + 1} + 1$
+\end{itemize}
+
+\section{4. Pointers and Functions}
+\subsection{Pointers}
+\begin{itemize}
+    \item The address of a variable can be found with \&, and has format specifier p
+    \item Pointers store these addresses, along with the data type they are pointing to
+    \item They are defined using *
+    \item Dereference pointers using *
+    \item Incrementing a pointer moves its value by the data type size
+\end{itemize}
+
+\subsection{Functions}
+\begin{itemize}
+    \item User-Defined Functions: Require prototype before main, and definition after main
+    \item Function Prototype: Return type, method name, types of parameters (name optional)
+    \item Use void in prototype of function with no parameters, empty means unspecified
+    \item C parameters are pass by value
+    \item Scope Rule: Local variables are only accessible within function they are declared
+    \item Can use static to make values persistent across calls
+    \item Function can take in pointers instead to achieve pass by reference
+\end{itemize}
+
+\section{5. Arrays, Strings and Structures}
+
+\subsection{Arrays}
+
+\begin{itemize}
+    \item An array is a homogeneous collection of elements of the same data type.
+    \item An array is declared using its element type, name, and size:
+    \begin{verbatim}
+int A[4];
+    \end{verbatim}
+    \item Array elements are indexed from 0 to $n-1$.
+    \item Arrays can be initialized at declaration:
+    \begin{verbatim}
+int A[4] = {1, 2, 3, 4};
+int B[4] = {1};       // {1, 0, 0, 0}
+int C[] = {1, 2, 3};  // size is inferred as 3
+    \end{verbatim}
+    \item An array cannot be assigned as a whole after declaration. Its
+    individual elements can still be modified:
+    \begin{verbatim}
+A[0] = 10;             // valid
+// A = B;              // invalid
+    \end{verbatim}
+    \item The array name is not a modifiable pointer. In most expressions,
+    it automatically decays into a pointer to the first element:
+    \begin{verbatim}
+A       // usually equivalent to &A[0]
+*A      // equivalent to A[0]
+    \end{verbatim}
+    \item The array name itself cannot be changed:
+    \begin{verbatim}
+// A++;                // invalid
+    \end{verbatim}
+    \item In a function parameter, these declarations are equivalent:
+    \begin{verbatim}
+void f(int A[]);
+void f(int *A);
+    \end{verbatim}
+    \item When an array is passed to a function, its size is not passed
+    automatically. The function usually needs a separate size parameter:
+    \begin{verbatim}
+void printArray(int A[], int size);
+    \end{verbatim}
+    \item The array name and the address of its first element usually have
+    the same numerical address, but they have different types:
+    \begin{verbatim}
+A       // type: pointer to int after decay
+&A      // type: pointer to the entire array
+    \end{verbatim}
+    \item Arrays with static storage duration are automatically initialized to zero if no initializer is provided. This includes global arrays and arrays declared with \texttt{static}:
+    \begin{verbatim}
+int globalArray[4];            // {0, 0, 0, 0}
+
+void f(void) {
+    static int staticArray[4]; // {0, 0, 0, 0}
+}
+    \end{verbatim}
+    \item A local automatic array without an initializer contains indeterminate values:
+    \begin{verbatim}
+void f(void) {
+    int localArray[4];         // uninitialized
+}
+    \end{verbatim}
+\end{itemize}
+
+\subsection{Multidimensional Array Addresses}
+\begin{itemize}
+    \item C stores multidimensional arrays contiguously in \textbf{row-major order}: the rightmost index changes fastest. For an array of element size $S$ bytes, \texttt{base} is the address of its first element.
+    \item \textbf{2D:} For \texttt{T A[R][C]}, $0 \leq i < R$, $0 \leq j < C$:
+    \[
+        \&A[i][j] = \texttt{base} + (i \times C + j) \times S
+    \]
+    First find the linear element index $iC+j$, then multiply by element size. Equivalently, \texttt{A[i][j]} is \texttt{*(*(A+i)+j)}.
+    \item \textbf{Example (2D):} \texttt{int A[3][5]} has $S=4$ and \texttt{base} $=\texttt{0x1000}$. \texttt{A[2][3]} has index $2(5)+3=13$, byte offset $13(4)=52=\texttt{0x34}$, hence address \texttt{0x1034}.
+    \item \textbf{3D:} For \texttt{T A[D][R][C]}, $0 \leq i < D$, $0 \leq j < R$, $0 \leq k < C$:
+    \[
+        \&A[i][j][k] = \texttt{base} + (i \times R \times C + j \times C + k) \times S
+    \]
+    \item \textbf{Example (3D):} \texttt{int A[2][3][4]} has $S=4$ and \texttt{base} $=\texttt{0x2000}$. \texttt{A[1][2][3]} has index $1(3)(4)+2(4)+3=23$, byte offset $23(4)=92=\texttt{0x5C}$, hence address \texttt{0x205C}.
+    \item General rule: multiply each index by the product of all dimensions to its right, add the results, then multiply by $S$. Bounds are checked by the programmer; C does not perform runtime bounds checking.
+\end{itemize}
+
+\subsection{Strings}
+\begin{itemize}
+    \item A string is an array of characters terminated by the null character \textbackslash 0
+    \item Can be initialised directly with a string
+    \item Input: fgets(str, size, stdin) or scanf("\%s", str)
+    \item Output: puts(str) or printf("\%s", str)
+    \item fgets() also reads in the newline character, so we might have to replace it
+    \item puts() automatically adds a newline
+    \item Some string functions include strlen(), strcmp(), strncmp(), strcpy(), strncpy()
+    \item A non-null terminated string might cause illegal access of memory
+\end{itemize}
+
+\subsection{Structures}
+\begin{itemize}
+    \item Allow grouping of heterogeneous members
+    \begin{verbatim}
+    typedef struct {
+        int acctNum;
+        float balance;
+    } account_t;
+    \end{verbatim}
+    \item Type declaration, not a variable
+    \item Initialisation is similar to arrays
+    \item Members are accessed using .
+    \item Assignments are okay, unlike arrays
+    \item Structs can also be passed into functions by value and returned from functions
+    \item Entire contents even arrays are copied when they are passed by value
+    \item Can use arrow operator $\rightarrow$ instead of $(*pointer).$
+    \item $.$ requires struct variable, while $\rightarrow$ requires a pointer to a struct 
+\end{itemize}
+
+\section{7. MIPS Introduction}
+\subsection{Overview}
+\begin{itemize}
+    \item Instruction Set Architecture: Abstraction on the interface between hardware and the low-level software
+    \item Machine Code: Instructions in binary / hexadecimal, Hard and tedious to code
+    \item Assembly: Human readable, Easier to write than machine code, symbolic version, may also provide pseudo-instructions as syntactic sugar
+    \item A computer has processor and memory, with a bus acting as the bridge between them
+    \item Code and data reside in memory, to be transferred into the processor during execution
+    \item To avoid having to frequently access memory, the processor has temporary storage for values known as registers
+    \item Need memory instructions to move data between registers as well as to and from memory
+    \item Need arithmetic instructions as well, some of which involve constants
+    \item Need instructions to manage control flow
+\end{itemize}
+
+\subsection{Registers}
+\begin{itemize}
+    \item Processor has fast memory in the form of registers
+    \item Typical architecture has 16 to 32 registers, which the compiler associates with variables
+    \item Registers have no data type
+    \item MIPS has 32 registers (refer to Green Card)
+\end{itemize}
+
+\subsection{Language and Basic Operations}
+\begin{itemize}
+    \item Each instruction executes a simple command
+    \item Each line has at most 1 instruction
+    \item Use \# for comments
+    \item Operation followed by destination then sources
+    \item e.g. add \$rd, \$rs, \$rt
+    \item Immediate operation: Has an immediate instead of second argument which uses 16 bit 2s complement
+    \item Immediate is sign extended, meaning the MSB is duplicated all the way across the upper half, which is actually value preserving
+    \item subi does not exist, use addi with negative constant
+    \item Register \$zero is guaranteed to have a zero value
+    \item Bit shifting is limited to 5 bits as registers are only 32 bits
+    \item not does not exist, use nor \$t0, \$t0, \$zero instead
+    \item To load large constants, we need to use lui to set the upper bits, and ori to set the lower bits
+    \item Basic Operations:
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/mips basic.png}
+\end{center}
+
+\section{8. More Instructions}
+\subsection{Memory Instructions}
+\begin{itemize}
+    \item The main memory can be viewed as a large single dimension array
+    \item Each location of the memory has an address
+    \item We can use addresses to access a single byte / word
+    \item A word usually has a size which is a power of 2, and usually coincides with register size
+    \item Word Alignment: Words that are aligned in memory begin at a byte address which is a multiple of word size
+    \item lw / sw \$t0, 4(\$s0)
+    \item Address is offset from a base address, and must be word aligned
+\end{itemize}
+
+\subsection{Control Flow}
+\begin{itemize}
+    \item Conditional: Branching
+    \item Unconditional: Jumping
+    \item beq \$r1, \$r2, label
+    \item Jump to statement with label if values in registers are equal
+    \item Labels represent instruction addresses and are not instructions
+    \item To produce shorter code, invert the condition in C code to favor early exit
+    \item Use combination of branching and jumps to make a for loop
+    \begin{verbatim}
+        add $s0, $zero, $zero
+        addi $s1, $zero, 10
+    Loop: beq $s0, $s1, Exit
+        addi $s2, $s2, 5
+        addi $s0, $s0, 1
+        j Loop
+    Exit:
+    \end{verbatim}
+    \item Use slt (set less than) to simulate comparisons
+\end{itemize}
+
+\section{9. MIPS Instruction Formats and Encoding}
+\begin{itemize}
+    \item Every MIPS instruction is 32 bits long
+    \item Register Format: op \$r1, \$r2, \$r3
+    \item Immediate Format: op \$r1, \$r2, Immd
+    \item Jump Format: op Immd
+    \item Refer to Green Card for more information
+\end{itemize}
+
+\subsection{R-Format}
+\begin{itemize}
+    \item opcode: Specifies instruction, 0 for all R-format instructions
+    \item funct: Combines with opcode to specify instruction
+    \item rs: Specifies source register
+    \item rt: Specifies target register
+    \item rd: Specifies destination register
+    \item shamt: Bit shift amount
+\end{itemize}
+
+\subsection{I-Format}
+\begin{itemize}
+    \item Bigger field for intermediate values
+    \item rt is destination register instead as there is no rd
+    \item immediate: 16 bits signed integer in 2s complement
+\end{itemize}
+
+\subsection{Addressing}
+\begin{itemize}
+    \item Since instructions are stored in memory, they also have addresses which are word aligned
+    \item Program Counter: Special register that keeps address of instruction being executed in processor
+    \item Conditional instructions are I-format and use immediate for PC-relative addressing
+    \item Immediate is specified as target address relative to PC, as a number of words
+    \item If branch is not taken, $PC = PC + 4$
+    \item If branch is taken, $PC = (PC+4)+(Immd \times 4)$
+    \item Start counting from next line of code
+\end{itemize}
+
+\subsubsection{Addressing Modes}
+\begin{itemize}
+    \item Register Addressing: Operand are all registers
+    \item Immediate Addressing: Operand is a constant within instruction itself
+    \item Base Addressing / Displacement Addressing: One of the register operands is a memory location while another immediate value corresponds to the offset from the given memory location
+    \item PC-Relative Addressing: Base address is given by PC register
+    \item Pseudo-Direct Addressing: Use only upper 4-bits of PC register, with rest of address being obtained from instruction, with last 2 bits 00 due to word alignment
+\end{itemize}
+
+\subsection{J-Format}
+\begin{itemize}
+    \item Allows jumps to further locations through psuedo-direct addressing
+    \item Target address field is only 26 bits however
+    \item But since instructions are word aligned, we can assume the last 2 bits to be 00
+    \item The remaining 4 bits are taken from the MSB of PC+4
+    \item Jump boundary is now 256MB
+\end{itemize}
+
+\section{10. Instruction Set Architecture}
+\begin{itemize}
+    \item Complex Instruction Set Computer (CISC): Single instruction performs complex operation, smaller program size, but complex implementation which does not leave room for hardware optimisation (e.g. x86-32)
+    \item Reduced Instruction Set Computer (RISC): Simple instruction set, easier to optimise hardware, but burden is on software to implement high-level language statements (e.g. MIPS, ARM)
+\end{itemize}
+
+\subsection{Data Storage}
+\begin{itemize}
+    \item Storage Architecture: How are operands and computation results stored
+    \item Stack Architecture: Operands are implicitly on top of stack
+    \item Accumulator: One operand is implicitly in the accumulator (a special register)
+    \item General-Purpose Register Architecture: Only explicit operands (Register-Memory, Register-Register / Load-Store)
+    \item Memory-Memory Architecture: All operands in memory
+    \item The most common is general-purpose register, with RISC using Register-Register design and CISC using a mix of both
+\end{itemize}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/architecture.png}
+\end{center}
+
+\subsection{Memory Addressing Mode}
+\begin{itemize}
+    \item Give $k$-bit addresses, the address space has size $2^k$ with each memory transfer consisting of one word of $n$ bits
+    \item Endianness: Relative ordering of bytes in a multiple-byte word store in memory
+    \item Big-Endian: MSB stored in lowest address (e.g. MIPS)
+    \item Little-Endian: LSB stored in lowest address
+    \item Addressing Modes in MIPS: Register, IMmmediate, Displacement
+\end{itemize}
+
+\subsection{Operations}
+\begin{itemize}
+    \item Standard Operation Types:
+    \begin{itemize}
+        \item Data Movement
+        \item Arithmetic, Shift, Logical
+        \item Control Flow, Subroutine Linkage
+        \item Interrupt
+        \item Synchronisation, String, Graphics
+    \end{itemize}
+    \item Frequently used instructions should be made the fastest
+\end{itemize}
+
+\subsection{Instruction Formats}
+\begin{itemize}
+    \item Instruction Length
+    \begin{itemize}
+        \item Variable-length: Require multi-step fetch and decode, more flexibility but more complex
+        \item Fixed-length: Used in most RISCs, allow for easy fetch and decode, simplifies pipelining and parallelism, but instruction bits are scarce
+        \item Hybrid: Mix of both
+    \end{itemize}
+    \item Instruction Fields
+    \begin{itemize}
+        \item Type and Size of operands
+        \item Consists of opcode and operands
+        \item Typical type and sizes include characters (1 byte), word, floating points with single and double precision (1 / 2 words)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Encoding the Instruction Set}
+\begin{itemize}
+    \item Instruction Encoding
+    \begin{itemize}
+        \item How are instructions represented in binary format
+        \item Variable v/s Fixed v/s Hybrid
+        \item Number of registers, adressing modes, number of operands
+    \end{itemize}
+    \item Encoding Fixed Length Instructions
+    \begin{itemize}
+        \item Expanding Opcode Scheme: Opcode has variable lengths for different instructions
+        \item Example: 16 bit instructions, 2 types of instructions
+        \item Type A: 2 operands, each 5 bits
+        \item Type B: 1 operand, 5 bits
+        \item Maximum Number: Minimise Type A, $1 + (2^6-1) \times 2^5=2017$
+        \item Minimum Number: Maximise Type A, $(2^6-1) + 1 \times 2^5=95$
+    \end{itemize}
+\end{itemize}
+
+\section{11. MIPS Datapath}
+\begin{itemize}
+    \item Processor has Datapath: Collection of components that process data and performs arithmetic, logical, and memory operations
+    \item It also has Control: Tells the datapath, memory, and I/O devices what to do according to program instructions
+    \item Basic Instruction Execution Cycle
+    \begin{itemize}
+        \item Fetch: Get instruction from memory, address is in PC
+        \item Decode: Find out the operation required
+        \item Operand Fetch: Get operands needed for operation
+        \item Execute: Perform the required operation
+        \item Result Write (Store): Store the result of the operation
+    \end{itemize}
+    \item MIPS Instruction Execution
+    \begin{itemize}
+        \item Decode and Operand Fetch are merged as decoding is simple
+        \item Execute is split into ALU (Calculation) and Memory Access
+    \end{itemize}
+\end{itemize}
+
+\subsection{Building a MIPS Processor}
+\subsubsection{Fetch Stage}
+\begin{itemize}
+    \item Use PC to fetch instruction from memory
+    \item Increment PC by 4 to get address of next instruction
+    \item Output the instruction to be executed to the decode stage
+    \item Instruction Memory:
+    \begin{itemize}
+        \item Storage element for instructions, functions like a big array
+        \item Is a sequential circuit
+        \item Has internal state that stores information
+        \item Clock signal is assumed and not shown
+        \item Supplies instruction when given an address
+    \end{itemize}
+    \item Adder: Combinational logic to implement addition of two numbers, has no state
+    \item Clocking: Read and update PC at the same time by performing each action at different parts of the clock cycle, update is only performed at rising edge
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/fetch.png}
+\end{center}
+
+\subsubsection{Decode Stage}
+\begin{itemize}
+    \item Gather data from instruction fields: opcode and data from necessary registers
+    \item Input instruction is taken from fetch stage
+    \item Output operation and necessary operands to ALU stage
+    \item Register File: \begin{itemize}
+        \item Collection of 32 registers
+        \item Each register is 32 bit, and at most two are read and one written
+        \item RegWrite: Control signal to indicate writing of register (1 is write, 0 is no write)
+    \end{itemize}
+    \item Problems
+    \begin{itemize}
+        \item Not all instructions have destination in the same place
+        \item Multiplexer and RegDst control signal is used to determine where to read from
+        \item Read Data 2 might be an immediate value instead of a register input
+        \item Multiplexer is used to choose the correct operand, with sign extension applied to 16-bit immediate to make it 32-bit
+    \end{itemize}
+    \item Multiplexer:
+    \begin{itemize}
+        \item Selects one input from multiple input lines
+        \item Input: $n$ lines of same width
+        \item Control: $m$ bits where $n=2^m$
+        \item Output: Select the $i^{th}$ input line based on control
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/decode.png}
+\end{center}
+
+\subsubsection{ALU Stage}
+\begin{itemize}
+    \item Arithmetic Logic Unit
+    \item a.k.a Execution Stage
+    \item Perform real work for most instructions
+    \item Input operation and operands are from decode stage
+    \item Output calculation result is given to memory stage
+    \item ALU
+    \begin{itemize}
+        \item Combinational logic to implement arithmetic and logical operations
+        \item Input: 2 32-bit numbers
+        \item Control: 4-bit signal
+        \item Output: Result of operation and 1-bit signal to indicate whether result is 0
+    \end{itemize}
+    \item Branch Instructions
+    \begin{itemize}
+        \item Branch Outcome: Determine using ALU for comparison and isZero? signal
+        \item Branch Target Address: Introduce logic to calculate the address using PC from fetch stage and Offset from decode stage
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/alu.png}
+\end{center}
+
+\subsubsection{Memory Stage}
+\begin{itemize}
+    \item Only load and store operations are needed
+    \item Use memory address calculated by ALU stage and read or write data memory
+    \item All other instructions remain idle
+    \item Input is computation result as memory address (if applicable) from ALU stage
+    \item Output is result to be stored (if applicable) to register write stage
+    \item Data Memory
+    \begin{itemize}
+        \item Storage element for data of program, functions like a big array
+        \item Input: Memory Address, Data to be Written
+        \item Control: Read and Write controls, only one at a time
+        \item Output: Data read from memory for load instructions
+    \end{itemize}
+    \item Need Read Data 2 from decode stage as Write Data
+    \item MemToReg: Control signal to indicate whether result came from memory or ALU unit, inverted
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/memory.png}
+\end{center}
+
+\subsubsection{Register Write Stage}
+\begin{itemize}
+    \item Most instructions write the result of computation into a register
+    \item Need destination register number and computation result
+    \item Exceptions are stores, branches, and jumps
+    \item Input is the computation result either from memory or ALU
+    \item No additional elements, simply route correct result into register file, using Write Register number generated back in decode stage
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/write.png}
+\end{center}
+
+\subsection{Complete MIPS Datapath}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/mips datapath.png}
+\end{center}
+
+\subsection{Compiling and Execution}
+\begin{itemize}
+    \item Compiler translate to high-level language to assembly language
+    \item Assembler translates to machine code
+    \item Processor executes the machine code
+    \item Compiling to MIPS
+    \begin{itemize}
+        \item Compilation is structured, and each structure can be compiled independently
+        \item Variable-to-Register Mapping
+        \item Conditions can be inverted for shorter code
+        \item Complex operations should be broken down with temporary registers
+        \item Array access is lw while array update is sw
+        \item Remember that word addresses differ by word size
+    \end{itemize}
+\end{itemize}
+
+\section{12. MIPS Control}
+\begin{itemize}
+    \item Control signals are generated based on the instruction to be executed
+    \item A control unit is needed to design a combinational circuit to generate signals based on opcode and possibly funct
+    \item General Flow: Take note of instructions to be implemented, go through each signal to observe how it is generated, construct truth table, then design control unit using logic gates
+    \item Logic Gates
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.5\linewidth]{images/gates.jpg}
+\end{center}
+
+\subsection{Control Signals}
+\begin{itemize}
+    \item RegDst:
+    \begin{itemize}
+        \item Selects destination register number
+        \item False: False: Write Register = rt / Inst[20:16]
+        \item True: Write Register = rd / Inst[15:11]
+    \end{itemize}
+    \item RegWrite:
+    \begin{itemize}
+        \item Enable writing of register
+        \item False: No register write
+        \item True: New value will be written
+    \end{itemize}
+    \item ALUSrc:
+    \begin{itemize}
+        \item Select second operand for ALU
+        \item False: Operand2 = Register Read Data 2
+        \item True: Operand2 = Immd / SignExt(Inst[15:0])
+    \end{itemize}
+    \item MemRead / MemWrite
+    \begin{itemize}
+        \item Enable reading / writing of data memory
+        \item False: Not performing memory read access or memory write
+        \item True: Read memory using Address / write register read data 2 to memory at address
+    \end{itemize}
+    \item MemToReg:
+    \begin{itemize}
+        \item Select result to be written back to register file
+        \item True: Register Write Data = Memory Read Data
+        \item False: Register Write Data = ALU Result
+    \end{itemize}
+    \item PCSrc:
+    \begin{itemize}
+        \item Select the next PC value
+        \item Use isZero? signal from ALU to determine branch outcome
+        \item If instruction is a branch AND taken then true
+        \item False: PC = PC + 4
+        \item True: PC = Immd << 2 + (PC + 4)
+    \end{itemize}
+    \item: ALUControl
+    \begin{itemize}
+        \item See below
+    \end{itemize}
+\end{itemize}
+
+\subsection{ALUcontrol}
+\begin{itemize}
+    \item Select the operation to be performed
+    \item Simplified ALU
+    \begin{itemize}
+        \item 1-bit ALU requires 4 control bits
+        \item Since MIPS is 32-bit, 32 ALUs are cascaded together
+        \item Cin is carry in, Cout is carry out
+        \item Cout of each ALU is connected to Cin of next ALU
+        \item This allows us to add the full 32-bit range of numbers
+        \item Square is a full adder
+        \item Trapezium represents multiplexers
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/alu gates.png}
+\end{center}
+\begin{itemize}
+    \item Takes in 2 bit ALUop and 6 bit funct code. Funct is only used to set ALUcontrol for R-type instruction, addi dont need as it alr identify the operation. 
+    \item ALUcontrol signal is sent to control ALU
+    \item Subtract can be implemented as $A + B' + 1 = A + (-B)$, with the $+ 1$ coming from Cin (only for the least-significant slice)
+    \item NOR is implement as $A' \land B' = (A \lor B)'$ by De Morgan's law
+    \item $overflow = C_{in, MSB} \oplus C_{out, MSB}$
+    \item $less (A < B) = Result_{MSB} \oplus overflow$
+    \item Less inputs of slices 1 to n-1 are tied to 0, whereas slice 0 outputs set-less from slice n-1
+\end{itemize}
+\begin{center}
+    \includegraphics[width=1\linewidth]{images/alu control.png}
+\end{center}
+\begin{itemize}
+    \item Multilevel Decoding
+    \begin{itemize}
+        \item ALUcontrol depends on 6-bit opcode and 6-bit funct
+        \item Brute Force: Use both directly and find expressions with 12 variables
+        \item Multilevel Decoding: Use some input to reduce cases, then generate the full output
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{ALUop}
+\begin{itemize}
+    \item Use opcode to generate 2-bit ALUop signal
+    \item lw / sw : 00 (both use add)
+    \item beq: 01 (uses sub)
+    \item R-type: 10 (uses funct)
+    \item Use ALUop and funct to generate 4-bit ALUcontrol signal
+    \item We can ignore some inputs that don't give us any useful information such as F5 and F4
+\end{itemize}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/aluop table.png}
+\end{center}
+
+\begin{itemize}
+    \item beq is uniquely determined by ALUop 1 = 1
+    \item F5 is always 1 for R-format, F4 is always 0
+    \item Possible combinational logic:
+    \item ALUcontrol 3 = 0
+    \item ALUcontrol 2 = $ALUop 0 \lor (ALUop 1 \land F1)$
+    \item ALUcontrol 1 = $(\neg ALUop 1) \lor (ALUop 1 \land \neg F2) = \neg ALUop 1 \lor \neg F2$ by De Morgan's law
+    \item ALUcontrol 0 = $(F0 \lor F3) \land ALUop 1$
+    \item This gives us the following combinational circuit:
+\end{itemize}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/aluop circuit.png}
+\end{center}
+This control block outputs the instructions needed for ALUcontrol. The 4 bits output represent Ainvert, Binvert, Operation respectively. ALUcontrol3 is always 0 here as NOR is not supported for this particular control block. 
+
+\subsubsection{Control Circuit Outputs}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/control outputs.png}
+\end{center}
+
+\subsubsection{Control Inputs}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/control inputs.png}
+\end{center}
+
+\subsubsection{Control Circuit}
+\begin{itemize}
+    \item Small circles are inverters
+    \item Input are combined using AND gates to determine output of signal based on above tables
+\end{itemize}
+\begin{center}
+    \includegraphics[width=0.7\linewidth]{images/control circuit.png}
+\end{center}
+
+\subsection{Finished Datapath and Control}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/control.png}
+\end{center}
+
+\begin{itemize}
+    \item RR1: rs or Inst[25:21]
+    \item RR2: rt or Inst[20:16]
+    \item WR: Selected from MUX
+    \item WD: Result of final MUX
+    \item Opr1: RD1 = R[rs]
+    \item Opr2: Selected from either Immd or RD2=R[rt]
+    \item Address: ALU result
+    \item Write Data: RD2 = R[rt]
+\end{itemize}
+
+\subsubsection{Instruction Execution}
+\begin{itemize}
+    \item Read contents of one or more storage elements
+    \item Perform computation through combinational logic
+    \item Write results to one or more storage elements
+    \item All the steps are performed within a clock period
+    \item Writing must be performed during rising edge
+    \item Single Cycle Implementation
+    \begin{itemize}
+        \item All instructions will take as much time as the slowest one
+    \end{itemize}
+    \item Multicycle Implementation
+    \begin{itemize}
+        \item Break instructions up into execution steps
+        \item Each execution step takes one clock cycle
+        \item Cycle time is shorter, clock frequency is higher
+        \item Instructions take variable number of clock cycles to complete execution
+    \end{itemize}
+    \item Pipelining
+    \begin{itemize}
+        \item Break up the instructions into execution steps, one per clock cycle
+        \item Allow different instructions to be in different execution steps simultaneously
+    \end{itemize}
+\end{itemize}
+
+% =========================================================
+% ADDED MIPS CHEATSHEET CONTENT
+% =========================================================
+\section{13. Expanding Opcodes \& Slot Allocation}
+\textbf{Register Size:} $\log_2(\text{Number of Registers})$. Example: 64 registers = 6 bits per register. \\
+\textbf{Opcode Length:} $\text{Total Bits} - \sum(\text{Operand Bits})$. 
+
+\textbf{Slot Allocation Model:}
+\begin{enumerate}
+    \item \textbf{Find Total Capacity:} The total available slot capacity is $2^{\text{longest opcode}}$.
+    \item \textbf{Calculate Cost:} Number of slots an instruction consumes is $2^{(\text{longest opcode} - \text{current opcode})}$.
+    \item \textbf{Equation:} $(\text{Cost}_A \times A) + (\text{Cost}_B \times B) + \dots = \text{Total Capacity}$.
+\end{enumerate}
+
+\textbf{Maximizing/Minimizing Total Instructions ($A \geq 1, B \geq 1$)}
+\begin{itemize}
+    \item \textbf{Maximum:} Set counts of expensive instructions ($>1$ slot) to 1. Fill the rest with 1-slot instructions.
+    \item \textbf{Minimum:} Maximize the most expensive class without starving out the others (leaving enough room for at least 1 of each remaining class). Move sequentially down to the 1-slot instructions.
+\end{itemize}
+
+\subsection{Example: Finding Maximum and Minimum Instructions}
+A system has 8-bit instructions and 4 registers. Class P takes 2 registers. Class Q takes 1 register.\\
+\bf{REMEMBER TO ADD ALL SLOTS} (e.g. Total = A + B + C)
+\begin{itemize}
+    \item \textbf{Register Size:} $\log_2(4) = 2$ bits.
+    \item \textbf{Opcodes:} Class P = $8 - (2 \times 2) = 4$ bits. Class Q = $8 - (1 \times 2) = 6$ bits.
+    \item \textbf{Slot Capacity:} Longest opcode is 6 bits $\rightarrow$ $2^6 = 64$ slots.
+    \item \textbf{Costs:} Class P = $2^{6-4} = 4$ slots/inst. Class Q = $2^{6-6} = 1$ slot/inst.
+    \item \textbf{Constraint:} $4p + q = 64$
+    \item \textbf{Equation:} We want $p + q = p + 64 - 4p = 64 - 3p$
+    \item \textbf{Maximum Total:} Minimize P $\rightarrow P=1$ (uses 4 slots). Remaining 60 slots go to Q. Total = $1 + 60 = 61$ instructions.
+    \item \textbf{Minimum Total:} Maximize P without starving Q $\rightarrow P=15$ (uses 60 slots). Remaining 4 slots go to Q. Total = $15 + 4 = 19$ instructions. *Note: use constraint to decide value of $p$
+\end{itemize}
+
+\section{14. Datapath Elements \& Control Signals Summary}
+
+\begin{center}
+\textbf{Table 2: Datapath Elements} \\
+\resizebox{\linewidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Instruction}} & \multicolumn{4}{c|}{\textbf{Registers File}} & \multicolumn{2}{c|}{\textbf{ALU}} & \multicolumn{2}{c|}{\textbf{Data Memory}} \\ \cline{2-9}
+ & \textbf{RR1} & \textbf{RR2} & \textbf{WR} & \textbf{WD} & \textbf{Opr1} & \textbf{Opr2} & \textbf{Address} & \textbf{Write Data} \\ \hline
+\textbf{R-type (add/sub/slt)} & rs & rt & rd & [rs] op [rt] & [rs] & [rt] & X & X \\ \hline
+\textbf{addi (I-type ALU)} & rs & rt & rt & [rs] + Imm   & [rs] & Imm32 & X & X \\ \hline
+\textbf{lw (Load Word)} & rs & rt & rt & Mem(Addr)    & [rs] & Imm32 & [rs] + Imm32 & X \\ \hline
+\textbf{sw (Store Word)} & rs & rt & X  & X            & [rs] & Imm32 & [rs] + Imm32 & [rt] \\ \hline
+\textbf{beq / bne (Branch)} & rs & rt & X  & X            & [rs] & [rt]  & X & X \\ \hline
+\textbf{j (Jump)} & X  & X  & X  & X            & X    & X     & X & X \\ \hline
+\end{tabular}
+}
+\end{center}
+
+\begin{center}
+\textbf{Table 3: Control Signals} \\
+\resizebox{\linewidth}{!}{
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Instruction} & \textbf{RegDst} & \textbf{RegWr} & \textbf{ALUSrc} & \textbf{MRd} & \textbf{MWr} & \textbf{MToR} & \textbf{Brch} & \textbf{ALUop} & \textbf{ALUctrl} \\ \hline
+\texttt{add}         & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 10 & 010 (ADD) \\ \hline
+\texttt{sub}         & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 10 & 110 (SUB) \\ \hline
+\texttt{addi}        & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 00 & 010 (ADD) \\ \hline
+\texttt{lw}          & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 00 & 010 (ADD) \\ \hline
+\texttt{sw}          & X & 0 & 1 & 0 & 1 & X & 0 & 00 & 010 (ADD) \\ \hline
+\texttt{beq / bne}   & X & 0 & 0 & 0 & 0 & X & 1 & 01 & 110 (SUB) \\ \hline
+\texttt{j}           & X & 0 & X & 0 & 0 & X & 0 & X & X \\ \hline
+\end{tabular}
+}
+\end{center}
+Does nothing: RegWrite = 0, MemWrite = 0, PCsrc (branch) = 0, rest = X
+
+\section{15. Critical Path \& Dependency Diagrams}
+\textit{Note: The following diagrams highlight the active data dependencies and control signals executed during standard single-cycle datapath operations.}
+
+\subsection{Group 1: I-Type ALU (addi, lui)}
+\textit{Active Paths: Imm goes to SignExt $\rightarrow$ ALUSrc MUX. RegDst selects rt. MemToReg selects ALU result.}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/i type.png}
+\end{center}
+
+\subsection{Group 2: R-Type (add, sub, slt, sll, srl)}
+\textit{Active Paths: ALUSrc MUX selects rd2 (or shamt for shifts). RegDst MUX selects rd.}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/r type.png}
+\end{center}
+
+\subsection{Group 3: Memory Access (lw, sw, sb)}
+\textit{Active Paths: ALU computes address. Data Memory is accessed. lw writes MemData to Reg-File(rt). sw/sb writes rd2 to Data Memory.}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/memory access.png}
+\end{center}
+
+\subsection{Group 4: Control Flow (beq, bne, j)}
+\textit{Active Paths: beq/bne use ALU for Zero comparison, and add SignExt Imm $\ll 2$ to PC+4. j shifts Imm26 $\ll 2$ directly to PC MUX.}
+\begin{center}
+    \includegraphics[width=\linewidth]{images/control flow.png}
+\end{center}
+
+\begin{center}
+\textbf{Table 4: ASCII Anchors} \\[4pt]
+\resizebox{0.60\linewidth}{!}{
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{char} & \textbf{dec} & \textbf{hex} & \textbf{bin} \\ \hline
+\texttt{SP} & \texttt{32}  & \texttt{20} & \texttt{00100000} \\ \hline
+\texttt{0}  & \texttt{48}  & \texttt{30} & \texttt{00110000} \\ \hline
+\texttt{9}  & \texttt{57}  & \texttt{39} & \texttt{00111001} \\ \hline
+\texttt{A}  & \texttt{65}  & \texttt{41} & \texttt{01000001} \\ \hline
+\texttt{Z}  & \texttt{90}  & \texttt{5A} & \texttt{01011010} \\ \hline
+\texttt{a}  & \texttt{97}  & \texttt{61} & \texttt{01100001} \\ \hline
+\texttt{z}  & \texttt{122} & \texttt{7A} & \texttt{01111010} \\ \hline
+\end{tabular}
+}
+\end{center}
+
+\end{multicols*}
+\end{document}
